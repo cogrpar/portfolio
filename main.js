@@ -1,12 +1,32 @@
+// misc functions
+function getRandomArbitrary(min, max, num) {
+  let results = [];
+  for (let i = 0; i < num; i++){
+    results.push(Math.random() * (max - min) + min);
+  }
+  return results;
+}
+
+function addArray(a,b){
+    return a.map((e,i) => e + b[i]);
+}
+
+
+
 // setup three js scene
-const scene = new THREE.Scene()
+const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
-)
-camera.position.z = 15
+);
+
+const cameraDistance = 6; // distance from the camera to the origin on x z plane
+const theta = Math.PI/2; // angle of camera in standard position in the x z plane
+camera.position.x = Math.cos(theta)*cameraDistance;
+camera.position.z = Math.sin(theta)*cameraDistance;
+camera.position.y = 2;
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -58,13 +78,17 @@ scene.background = spaceTexture;
 
 
 // add geometries
+let loadPlanet;
+let loadRings;
 const loader = new THREE.GLTFLoader();
 loader.load('models/planet.glb', function(gltf) {
+  loadPlanet = gltf;
   scene.add(gltf.scene);
 }, undefined, function(error) {
   console.error(error);
 });
 loader.load('models/rings.glb', function(gltf) {
+  loadRings = gltf;
   scene.add(gltf.scene);
 }, undefined, function(error) {
   console.error(error);
@@ -72,8 +96,47 @@ loader.load('models/rings.glb', function(gltf) {
 
 
 
-// animation loop
+// animation
+let directions = [];
+let currentDirection = 0;
+function cameraOscillate(numDirections, severity){ // function that animates the camera oscillating between facing some number of randomly generated directions
+  if (directions.length === 0){ // if this is the first time being run, generate the random directions
+    for (let i = 0; i < numDirections; i++){
+      directions.push(addArray([camera.rotation.x, camera.rotation.y, camera.rotation.z], getRandomArbitrary(-severity, severity, 3)));
+    }
+  }
+
+  // calculate how close the camera is to the current direction
+  let del = Math.abs(camera.rotation.x - directions[currentDirection][0]) + Math.abs((camera.rotation.y - directions[currentDirection][1])) + Math.abs((camera.rotation.z - directions[currentDirection][2]));
+
+  if (del < 0.1){ // if close enough begin going to the next direction
+    if (currentDirection === directions.length-1){
+      currentDirection = 0;
+    }
+    else{
+      currentDirection += 1;
+    }
+  }
+  else{ // otherwise go to the current direction
+    let scale = 5000*Math.abs(camera.rotation.x - directions[currentDirection][0]);
+    camera.rotation.x -= (camera.rotation.x - directions[currentDirection][0])/scale;
+    camera.rotation.y -= (camera.rotation.y - directions[currentDirection][1])/scale;
+    camera.rotation.z -= (camera.rotation.z - directions[currentDirection][2])/scale;
+  }
+}
+
 function animate() {
+  // rotate the planet and rings
+  if (loadPlanet){
+    loadPlanet.scene.rotation.y += 0.003;
+  }
+  if (loadRings){
+    loadRings.scene.rotation.y += 0.01;
+  }
+
+  // oscillate the camera
+  cameraOscillate(5, 0.1);
+  
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
