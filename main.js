@@ -58,16 +58,22 @@ scene.background = spaceTexture;
 
 
 // add geometries
-const planetGeometry = new THREE.SphereGeometry(10, 48, 48);
-const planetMaterial = new THREE.MeshStandardMaterial({ color: 0xff5733 });
-const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-scene.add(planet);
+const loader = new THREE.GLTFLoader();
+loader.load('models/planet.glb', function(gltf) {
+  scene.add(gltf.scene);
+}, undefined, function(error) {
+  console.error(error);
+});
+loader.load('models/rings.glb', function(gltf) {
+  scene.add(gltf.scene);
+}, undefined, function(error) {
+  console.error(error);
+});
 
 
 
 // animation loop
 function animate() {
-  //controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
