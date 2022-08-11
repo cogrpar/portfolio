@@ -26,7 +26,7 @@ const cameraDistance = 6; // distance from the camera to the origin on x z plane
 const theta = Math.PI/2; // angle of camera in standard position in the x z plane
 camera.position.x = Math.cos(theta)*cameraDistance;
 camera.position.z = Math.sin(theta)*cameraDistance;
-camera.position.y = 2;
+camera.position.y = 1;
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -94,6 +94,44 @@ loader.load('models/rings.glb', function(gltf) {
   console.error(error);
 });
 
+// creating text
+const ttfLoader = new THREE.TTFLoader();
+const fontLoader = new THREE.FontLoader();
+ttfLoader.load(
+	// resource URL
+	'fonts/AdventureSubtitles.ttf',
+  // onload callback
+  function(loaded){
+    let font = fontLoader.parse(loaded);
+    // do something with the font
+		console.log(font);
+    const text = new THREE.TextGeometry('PLACEHOLDER',{
+      font: font,
+      size: 30,
+      height: 3,
+      curveSegments: 12,
+      bevelEnabled: false
+    });
+    const textMesh = new THREE.Mesh(
+      text,
+      new THREE.MeshPhysicalMaterial({  
+        roughness: 0.1,  
+        transmission: 0.7, // Add transparency
+        thickness: 0.1,
+        color: 0xf03030,
+      })
+    );
+    textMesh.geometry.center();
+    textMesh.scale.x = 0.01; 
+    textMesh.scale.y = 0.01; 
+    textMesh.scale.z = 0.01;
+
+    textMesh.position.z = 3.5;
+    textMesh.position.y = 0.5;
+    textMesh.rotation.x = -Math.PI/15;
+    scene.add(textMesh)
+  }
+);
 
 
 // animation
