@@ -193,11 +193,10 @@ function cameraOscillate(numDirections, severity){ // function that animates the
   }
 }
 
-// listen for mousedown for navigating the menu
+// listen for mousedown and key presses for navigating the menu
 
 // events to handle mouse presses
-var mouseDown = 0;
-document.body.onmousedown = function(event) { 
+document.body.onmousedown = function(event){ 
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
   if (x > 0.5 ){
     // update camera oscillation vars to make camera move to the right
@@ -211,10 +210,26 @@ document.body.onmousedown = function(event) {
     currentDirection = 0;
     baseTheta = baseTheta+primaryLinksTheta;
   }
-}
-document.body.onmouseup = function() {
-    mouseDown = 0;
-}
+};
+document.body.onmouseup = function(){
+};
+
+// events to handle key presses
+document.body.onkeydown = function(event){
+  console.log(event)
+  if (event.key == 'ArrowRight'){
+    // update camera oscillation vars to make camera move to the right
+    directions = [];
+    currentDirection = 0;
+    baseTheta = baseTheta-primaryLinksTheta;
+  }
+  if (event.key == 'ArrowLeft'){
+    // update camera oscillation vars to make camera move to the left
+    directions = [];
+    currentDirection = 0;
+    baseTheta = baseTheta+primaryLinksTheta;
+  }
+};
 
 // main animation function
 function animate() {
