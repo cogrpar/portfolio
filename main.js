@@ -103,7 +103,7 @@ primaryLinks.dict = {}; // dictionary storing the 3d objects of the primary link
 primaryLinks.group = new THREE.Group(); // create group of objects for the primary links
 
 const projectLinks = {};
-projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProing', 'More']; 
+projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProving', 'More']; 
 projectLinks.num =projectLinks.links.length;
 projectLinks.theta = Math.PI / (projectLinks.num);
 projectLinks.dict = {};
@@ -261,16 +261,20 @@ function cameraOscillate(numDirections, severity) { // function that animates th
 document.body.onmousedown = function(event) {
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
   if (x > 0.5) {
-    // update camera oscillation vars to make camera move to the right
-    directions = [];
-    currentDirection = 0;
-    baseTheta = baseTheta - currentMenu.theta;
+    if (-currentMenu.theta*currentMenu.num - (baseTheta-currentMenu.theta) < -0.1){ // don't update if this is the rightmost option
+      // update camera oscillation vars to make camera move to the right
+      directions = [];
+      currentDirection = 0;
+      baseTheta = baseTheta - currentMenu.theta;
+    }
   }
   if (x < -0.5) {
-    // update camera oscillation vars to make camera move to the left
-    directions = [];
-    currentDirection = 0;
-    baseTheta = baseTheta + currentMenu.theta;
+    if (baseTheta+currentMenu.theta < 0.1){ // don't update if this is the leftmost option
+      // update camera oscillation vars to make camera move to the left
+      directions = [];
+      currentDirection = 0;
+      baseTheta = baseTheta + currentMenu.theta;
+    }
   }
 };
 document.body.onmouseup = function() {
@@ -280,16 +284,20 @@ document.body.onmouseup = function() {
 document.body.onkeydown = function(event) {
   console.log(event)
   if (event.key == 'ArrowRight') {
-    // update camera oscillation vars to make camera move to the right
-    directions = [];
-    currentDirection = 0;
-    baseTheta = baseTheta - currentMenu.theta;
+    if (-currentMenu.theta*currentMenu.num - (baseTheta-currentMenu.theta) < -0.1){ // don't update if this is the rightmost option
+      // update camera oscillation vars to make camera move to the right
+      directions = [];
+      currentDirection = 0;
+      baseTheta = baseTheta - currentMenu.theta;
+    }
   }
   if (event.key == 'ArrowLeft') {
-    // update camera oscillation vars to make camera move to the left
-    directions = [];
-    currentDirection = 0;
-    baseTheta = baseTheta + currentMenu.theta;
+    if (baseTheta+currentMenu.theta < 0.1){ // don't update if this is the leftmost option
+      // update camera oscillation vars to make camera move to the left
+      directions = [];
+      currentDirection = 0;
+      baseTheta = baseTheta + currentMenu.theta;
+    }
   }
   if (event.key == " "){
     if (currentMenu.links == primaryLinks.links){
