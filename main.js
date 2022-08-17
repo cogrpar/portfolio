@@ -1,14 +1,14 @@
 // misc functions
 function getRandomArbitrary(min, max, num) {
   let results = [];
-  for (let i = 0; i < num; i++){
+  for (let i = 0; i < num; i++) {
     results.push(Math.random() * (max - min) + min);
   }
   return results;
 }
 
-function addArray(a,b){
-    return a.map((e,i) => e + b[i]);
+function addArray(a, b) {
+  return a.map((e, i) => e + b[i]);
 }
 
 
@@ -24,8 +24,8 @@ const camera = new THREE.PerspectiveCamera(
 
 const cameraDistance = 7; // distance from the camera to the origin on x z plane
 let theta = 0; // angle of camera in standard position in the x z plane
-camera.position.x = Math.cos(theta)*cameraDistance;
-camera.position.z = Math.sin(theta)*cameraDistance;
+camera.position.x = Math.cos(theta) * cameraDistance;
+camera.position.z = Math.sin(theta) * cameraDistance;
 camera.position.y = 1.2;
 camera.lookAt(0, 0, 0);
 
@@ -95,53 +95,115 @@ loader.load('models/rings.glb', function(gltf) {
 });
 
 // creating text
-const primaryLinks = ['About Me', 'Projects', 'My Work'];
-let numPrimaryLinks = primaryLinks.length;
-let primaryLinksTheta = Math.PI/(1.5*numPrimaryLinks);
-let primaryLinksDict = {}; // dictionary storing the 3d objects of the primary links
-const primaryLinksGroup = new THREE.Group(); // create group of objects for the primary links
+const primaryLinks = {};
+primaryLinks.links = ['About Me', 'Projects', 'My Work'];
+primaryLinks.num = primaryLinks.links.length;
+primaryLinks.theta = Math.PI / (1.5 * primaryLinks.num);
+primaryLinks.dict = {}; // dictionary storing the 3d objects of the primary links
+primaryLinks.group = new THREE.Group(); // create group of objects for the primary links
 
+const projectLinks = {};
+projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProing', 'More']; 
+projectLinks.num =projectLinks.links.length;
+projectLinks.theta = Math.PI / (projectLinks.num);
+projectLinks.dict = {};
+projectLinks.group = new THREE.Group();
+
+const quantumProjects = {};
+quantumProjects.links = ['Qonic', 'Quantum\nHoare Logic', 'QCPUWare', 'Breakthrough\nJr Challenge'];
+quantumProjects.num = quantumProjects.links.length;
+quantumProjects.theta = Math.PI / (quantumProjects.num);
+quantumProjects.dict = {};
+quantumProjects.group = new THREE.Group();
+
+const aiProjects = {};
+aiProjects.links = ['Hill Climb\nRacing AI', 'Custom Java\nNeural Network'];
+aiProjects.num = aiProjects.links.length;
+aiProjects.theta = Math.PI / (aiProjects.num);
+aiProjects.dict = {};
+aiProjects.group = new THREE.Group();
+
+const tpProjects = {};
+tpProjects.links = ['Lean4 Turing\nMachine', 'Lean4 Axiomatic\nSystem', 'Quantum\nHoare Logic'];
+tpProjects.num = tpProjects.links.length;
+tpProjects.theta = Math.PI / (tpProjects.num);
+tpProjects.dict = {};
+tpProjects.group = new THREE.Group();
+
+const moreProjects = {};
+moreProjects.links = ['Robotics', 'AP Physics\nLabs Portfolio'];
+moreProjects.num = moreProjects.links.length;
+moreProjects.theta = Math.PI / (moreProjects.num);
+moreProjects.dict = {};
+moreProjects.group = new THREE.Group();
+
+const workLinks = {};
+workLinks.links = ['SVVSD AI\nLeadership', 'SVVSD SAR'];
+workLinks.num = workLinks.links.length;
+workLinks.theta = Math.PI / (workLinks.num);
+workLinks.dict = {};
+workLinks.group = new THREE.Group();
+
+let currentMenu = primaryLinks; // this variable keeps track of the currently loaded menu
+let previousMenu; // this variable stores the previous menu so it can be un-loaded
 const ttfLoader = new THREE.TTFLoader();
 const fontLoader = new THREE.FontLoader();
-ttfLoader.load(
-	// resource URL
-	'fonts/AdventureSubtitles.ttf',
-  // onload callback
-  function(loaded){
-    let font = fontLoader.parse(loaded);
-    // do something with the font
-		console.log(font);
 
-    // for each link, load it in
-    for (let i = 0; i < numPrimaryLinks; i++){
-      let text = new THREE.TextGeometry(primaryLinks[i],{
-        font: font,
-        size: 0.3,
-        height: 0.03,
-        curveSegments: 12,
-        bevelEnabled: false
-      });
-      primaryLinksDict[primaryLinks[i]] = new THREE.Mesh(
-        text,
-        new THREE.MeshPhysicalMaterial({  
-          roughness: 0.1,  
-          transmission: 0.7, // Add transparency
-          thickness: 0.1,
-          color: 0xf03030,
-        })
-      );
-      // position each link around the planet
-      primaryLinksDict[primaryLinks[i]].geometry.center();
-      primaryLinksDict[primaryLinks[i]].position.x = Math.cos(primaryLinksTheta*i)*3.5;
-      primaryLinksDict[primaryLinks[i]].position.z = -Math.sin(primaryLinksTheta*i)*3.5;
-      primaryLinksDict[primaryLinks[i]].position.y = 0.5;
-      
-      primaryLinksDict[primaryLinks[i]].rotation.y = (Math.PI/2)+(primaryLinksTheta*i);
-      primaryLinksGroup.add(primaryLinksDict[primaryLinks[i]]);
-    }
-    scene.add(primaryLinksGroup);
+function loadMenu(newMenu, visible=false) { // function to transition from the current menu to a new menu
+  if (newMenu.group.children.length == 0){
+    ttfLoader.load(
+      // resource URL
+      'fonts/AdventureSubtitles.ttf',
+      // onload callback
+      function(loaded) {
+        let font = fontLoader.parse(loaded);
+        // do something with the font
+        console.log(font);
+  
+        // for each link, load it in
+        for (let i = 0; i < newMenu.num; i++) {
+          let text = new THREE.TextGeometry(newMenu.links[i], {
+            font: font,
+            size: 0.3,
+            height: 0.03,
+            curveSegments: 12,
+            bevelEnabled: false
+          });
+          newMenu.dict[newMenu.links[i]] = new THREE.Mesh(
+            text,
+            new THREE.MeshPhysicalMaterial({
+              roughness: 0.1,
+              transmission: 0.7, // Add transparency
+              thickness: 0.1,
+              color: 0xf03030,
+            })
+          );
+          // position each link around the planet
+          newMenu.dict[newMenu.links[i]].geometry.center();
+          newMenu.dict[newMenu.links[i]].position.x = Math.cos(newMenu.theta * i) * 3.5;
+          newMenu.dict[newMenu.links[i]].position.z = -Math.sin(newMenu.theta * i) * 3.5;
+          newMenu.dict[newMenu.links[i]].position.y = 0.6;
+  
+          newMenu.dict[newMenu.links[i]].rotation.y = (Math.PI / 2) + (newMenu.theta * i);
+          if (!visible){
+            newMenu.dict[newMenu.links[i]].visible = false;
+          }
+          
+          newMenu.group.add(newMenu.dict[newMenu.links[i]]);
+        }
+        scene.add(newMenu.group);
+      }
+    );
   }
-);
+}
+loadMenu(currentMenu, true);
+loadMenu(projectLinks);
+loadMenu(quantumProjects);
+loadMenu(aiProjects);
+loadMenu(tpProjects);
+loadMenu(moreProjects);
+loadMenu(workLinks);
+let transitioning = false;
 
 
 
@@ -152,9 +214,9 @@ let cameraPointX = 0;
 let cameraPointY = 0;
 let cameraPointZ = 0;
 let baseTheta = theta;
-function cameraOscillate(numDirections, severity){ // function that animates the camera oscillating between facing some number of randomly generated directions
-  if (directions.length === 0){ // if this is the first time being run, generate the random directions
-    for (let i = 0; i < numDirections; i++){
+function cameraOscillate(numDirections, severity) { // function that animates the camera oscillating between facing some number of randomly generated directions
+  if (directions.length === 0) { // if this is the first time being run, generate the random directions
+    for (let i = 0; i < numDirections; i++) {
       directions.push(getRandomArbitrary(-severity, severity, 3));
     }
   }
@@ -162,15 +224,15 @@ function cameraOscillate(numDirections, severity){ // function that animates the
   // calculate how close the camera is to the current direction
   let del = Math.abs(cameraPointX - directions[currentDirection][0]) + Math.abs((cameraPointY - directions[currentDirection][1])) + Math.abs((cameraPointZ - directions[currentDirection][2]));
 
-  if (del < 0.1){ // if close enough begin going to the next direction
-    if (currentDirection === directions.length-1){
+  if (del < 0.1) { // if close enough begin going to the next direction
+    if (currentDirection === directions.length - 1) {
       currentDirection = 0;
     }
-    else{
+    else {
       currentDirection += 1;
     }
   }
-  else{ // otherwise go to the current direction
+  else { // otherwise go to the current direction
     let scale = 0.01;
     cameraPointX -= scale * (cameraPointX - directions[currentDirection][0]);
     cameraPointY -= scale * (cameraPointY - directions[currentDirection][1]);
@@ -179,16 +241,16 @@ function cameraOscillate(numDirections, severity){ // function that animates the
   }
 
   // rotate about the origin if basePos is updated
-  if (Math.abs(theta-baseTheta) > 0.01){
-    if (theta > baseTheta){
+  if (Math.abs(theta - baseTheta) > 0.01) {
+    if (theta > baseTheta) {
       theta -= 0.01;
-      camera.position.x = Math.cos(theta)*cameraDistance;
-      camera.position.z = Math.sin(theta)*cameraDistance;
+      camera.position.x = Math.cos(theta) * cameraDistance;
+      camera.position.z = Math.sin(theta) * cameraDistance;
     }
-    else{
+    else {
       theta += 0.01;
-      camera.position.x = Math.cos(theta)*cameraDistance;
-      camera.position.z = Math.sin(theta)*cameraDistance;
+      camera.position.x = Math.cos(theta) * cameraDistance;
+      camera.position.z = Math.sin(theta) * cameraDistance;
     }
   }
 }
@@ -196,54 +258,105 @@ function cameraOscillate(numDirections, severity){ // function that animates the
 // listen for mousedown and key presses for navigating the menu
 
 // events to handle mouse presses
-document.body.onmousedown = function(event){ 
+document.body.onmousedown = function(event) {
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
-  if (x > 0.5 ){
+  if (x > 0.5) {
     // update camera oscillation vars to make camera move to the right
     directions = [];
     currentDirection = 0;
-    baseTheta = baseTheta-primaryLinksTheta;
+    baseTheta = baseTheta - currentMenu.theta;
   }
-  if (x < -0.5){
+  if (x < -0.5) {
     // update camera oscillation vars to make camera move to the left
     directions = [];
     currentDirection = 0;
-    baseTheta = baseTheta+primaryLinksTheta;
+    baseTheta = baseTheta + currentMenu.theta;
   }
 };
-document.body.onmouseup = function(){
+document.body.onmouseup = function() {
 };
 
 // events to handle key presses
-document.body.onkeydown = function(event){
+document.body.onkeydown = function(event) {
   console.log(event)
-  if (event.key == 'ArrowRight'){
+  if (event.key == 'ArrowRight') {
     // update camera oscillation vars to make camera move to the right
     directions = [];
     currentDirection = 0;
-    baseTheta = baseTheta-primaryLinksTheta;
+    baseTheta = baseTheta - currentMenu.theta;
   }
-  if (event.key == 'ArrowLeft'){
+  if (event.key == 'ArrowLeft') {
     // update camera oscillation vars to make camera move to the left
     directions = [];
     currentDirection = 0;
-    baseTheta = baseTheta+primaryLinksTheta;
+    baseTheta = baseTheta + currentMenu.theta;
+  }
+  if (event.key == " "){
+    if (currentMenu.links == primaryLinks.links){
+      previousMenu = currentMenu;
+      currentMenu = projectLinks;
+    }
+    else if (currentMenu.links == projectLinks.links){
+      previousMenu = currentMenu;
+      currentMenu = quantumProjects;
+    }
+    else if (currentMenu.links == quantumProjects.links){
+      previousMenu = currentMenu;
+      currentMenu = aiProjects;
+    }
+    else if (currentMenu.links == aiProjects.links){
+      previousMenu = currentMenu;
+      currentMenu = tpProjects;
+    }
+    else if (currentMenu.links == tpProjects.links){
+      previousMenu = currentMenu;
+      currentMenu = moreProjects;
+    }
+    else if (currentMenu.links == moreProjects.links){
+      previousMenu = currentMenu;
+      currentMenu = workLinks;
+    }
+    if (currentMenu.group.children.length == currentMenu.num){
+      directions = [];
+      currentDirection = 0;
+      baseTheta = theta-2*Math.PI;
+      transitioning = true;
+    }
   }
 };
 
 // main animation function
 function animate() {
   // rotate the planet and rings
-  if (loadPlanet){
+  if (loadPlanet) {
     loadPlanet.scene.rotation.y += 0.003;
   }
-  if (loadRings){
+  if (loadRings) {
     loadRings.scene.rotation.y += 0.01;
   }
 
   // oscillate the camera
   cameraOscillate(5, 0.8);
-  
+
+  // check to see if the menu is being transitioned
+  if (transitioning){
+    for (let i = 0; i < currentMenu.num; i++){
+      if (Math.abs(Math.abs(theta) - currentMenu.theta*i - Math.PI) < 0.1){
+        currentMenu.group.children[i].visible = true;
+      }
+    }
+    for (let i = 0; i < previousMenu.num; i++){
+      if (Math.abs(Math.abs(theta) - previousMenu.theta*i - Math.PI) < 0.1){
+        previousMenu.group.children[i].visible = false;
+      }
+    }
+    if (Math.abs(theta) > 1.99*Math.PI){
+      transitioning = false;
+      baseTheta = 0;
+      theta = 0;
+    }
+  }
+
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
