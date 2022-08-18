@@ -342,7 +342,7 @@ function animate() {
     var intersection = intersects[0];
     var obj = intersection.object;
 
-    if (mouseDown == 1) {
+    if (mouseDown == 1 || (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
       obj.material.color.setHex(0xffd900);
       if (currentMenu == primaryLinks){
         if (obj == primaryLinks.group.children[0]){
