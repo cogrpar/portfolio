@@ -103,8 +103,8 @@ primaryLinks.dict = {}; // dictionary storing the 3d objects of the primary link
 primaryLinks.group = new THREE.Group(); // create group of objects for the primary links
 
 const projectLinks = {};
-projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProving', 'More']; 
-projectLinks.num =projectLinks.links.length;
+projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProving', 'More'];
+projectLinks.num = projectLinks.links.length;
 projectLinks.theta = Math.PI / (projectLinks.num);
 projectLinks.dict = {};
 projectLinks.group = new THREE.Group();
@@ -149,8 +149,8 @@ let previousMenu; // this variable stores the previous menu so it can be un-load
 const ttfLoader = new THREE.TTFLoader();
 const fontLoader = new THREE.FontLoader();
 
-function loadMenu(newMenu, visible=false) { // function to transition from the current menu to a new menu
-  if (newMenu.group.children.length == 0){
+function loadMenu(newMenu, visible = false) { // function to transition from the current menu to a new menu
+  if (newMenu.group.children.length == 0) {
     ttfLoader.load(
       // resource URL
       'fonts/AdventureSubtitles.ttf',
@@ -159,7 +159,7 @@ function loadMenu(newMenu, visible=false) { // function to transition from the c
         let font = fontLoader.parse(loaded);
         // do something with the font
         console.log(font);
-  
+
         // for each link, load it in
         for (let i = 0; i < newMenu.num; i++) {
           let text = new THREE.TextGeometry(newMenu.links[i], {
@@ -183,12 +183,12 @@ function loadMenu(newMenu, visible=false) { // function to transition from the c
           newMenu.dict[newMenu.links[i]].position.x = Math.cos(newMenu.theta * i) * 3.5;
           newMenu.dict[newMenu.links[i]].position.z = -Math.sin(newMenu.theta * i) * 3.5;
           newMenu.dict[newMenu.links[i]].position.y = 0.6;
-  
+
           newMenu.dict[newMenu.links[i]].rotation.y = (Math.PI / 2) + (newMenu.theta * i);
-          if (!visible){
+          if (!visible) {
             newMenu.dict[newMenu.links[i]].visible = false;
           }
-          
+
           newMenu.group.add(newMenu.dict[newMenu.links[i]]);
         }
         scene.add(newMenu.group);
@@ -258,10 +258,14 @@ function cameraOscillate(numDirections, severity) { // function that animates th
 // listen for mousedown and key presses for navigating the menu
 
 // events to handle mouse presses
+var mouseDown = 0;
+var raycaster = new THREE.Raycaster(); // raycaster object to detect objects intersected by the ray sent out by the mouse
+var mouseVector = new THREE.Vector3(); // vector to store the mouse position
 document.body.onmousedown = function(event) {
+  mouseDown = 1;
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
   if (x > 0.5) {
-    if (-currentMenu.theta*currentMenu.num - (baseTheta-currentMenu.theta) < -0.1){ // don't update if this is the rightmost option
+    if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
       // update camera oscillation vars to make camera move to the right
       directions = [];
       currentDirection = 0;
@@ -269,7 +273,7 @@ document.body.onmousedown = function(event) {
     }
   }
   if (x < -0.5) {
-    if (baseTheta+currentMenu.theta < 0.1){ // don't update if this is the leftmost option
+    if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
       // update camera oscillation vars to make camera move to the left
       directions = [];
       currentDirection = 0;
@@ -278,13 +282,18 @@ document.body.onmousedown = function(event) {
   }
 };
 document.body.onmouseup = function() {
-};
+  mouseDown = 0;
+}
+document.body.onmousemove = function(event) { // dont trigger the mouse down if the mouse is moving
+  mouseVector.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+  mouseVector.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+}
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
   console.log(event)
   if (event.key == 'ArrowRight') {
-    if (-currentMenu.theta*currentMenu.num - (baseTheta-currentMenu.theta) < -0.1){ // don't update if this is the rightmost option
+    if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
       // update camera oscillation vars to make camera move to the right
       directions = [];
       currentDirection = 0;
@@ -292,46 +301,23 @@ document.body.onkeydown = function(event) {
     }
   }
   if (event.key == 'ArrowLeft') {
-    if (baseTheta+currentMenu.theta < 0.1){ // don't update if this is the leftmost option
+    if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
       // update camera oscillation vars to make camera move to the left
       directions = [];
       currentDirection = 0;
       baseTheta = baseTheta + currentMenu.theta;
     }
   }
-  if (event.key == " "){
-    if (currentMenu.links == primaryLinks.links){
-      previousMenu = currentMenu;
-      currentMenu = projectLinks;
-    }
-    else if (currentMenu.links == projectLinks.links){
-      previousMenu = currentMenu;
-      currentMenu = quantumProjects;
-    }
-    else if (currentMenu.links == quantumProjects.links){
-      previousMenu = currentMenu;
-      currentMenu = aiProjects;
-    }
-    else if (currentMenu.links == aiProjects.links){
-      previousMenu = currentMenu;
-      currentMenu = tpProjects;
-    }
-    else if (currentMenu.links == tpProjects.links){
-      previousMenu = currentMenu;
-      currentMenu = moreProjects;
-    }
-    else if (currentMenu.links == moreProjects.links){
-      previousMenu = currentMenu;
-      currentMenu = workLinks;
-    }
-    if (currentMenu.group.children.length == currentMenu.num){
-      directions = [];
-      currentDirection = 0;
-      baseTheta = theta-2*Math.PI;
-      transitioning = true;
-    }
-  }
 };
+
+function transitionMenu() {
+  if (currentMenu.group.children.length == currentMenu.num) {
+    directions = [];
+    currentDirection = 0;
+    baseTheta = theta - 2 * Math.PI;
+    transitioning = true;
+  }
+}
 
 // main animation function
 function animate() {
@@ -346,19 +332,74 @@ function animate() {
   // oscillate the camera
   cameraOscillate(5, 0.8);
 
+  // check to see if a link has been selected
+  raycaster.setFromCamera(mouseVector, camera); // send a ray from the camera to the mouse vector
+  var intersects = raycaster.intersectObjects(currentMenu.group.children); // detect object intersecting the ray
+  currentMenu.group.children.forEach(function(cube) { // reset color of each object
+    cube.material.color.setHex(0xf03030);
+  });
+  if (intersects.length > 0) { // if there are objects that were intersected
+    var intersection = intersects[0];
+    var obj = intersection.object;
+
+    if (mouseDown == 1) {
+      obj.material.color.setHex(0xffd900);
+      if (currentMenu == primaryLinks){
+        if (obj == primaryLinks.group.children[0]){
+          
+        }
+        else if (obj == primaryLinks.group.children[1]){
+          previousMenu = currentMenu;
+          currentMenu = projectLinks;
+          transitionMenu();
+        }
+        else if (obj == primaryLinks.group.children[2]){
+          previousMenu = currentMenu;
+          currentMenu = workLinks;
+          transitionMenu();
+        }
+      }
+      else if (currentMenu == projectLinks){
+        if (obj == projectLinks.group.children[0]){
+          previousMenu = currentMenu;
+          currentMenu = quantumProjects;
+          transitionMenu();
+        }
+        else if (obj == projectLinks.group.children[1]){
+          previousMenu = currentMenu;
+          currentMenu = aiProjects;
+          transitionMenu();
+        }
+        else if (obj == projectLinks.group.children[2]){
+          previousMenu = currentMenu;
+          currentMenu = tpProjects;
+          transitionMenu();
+        }
+        else if (obj == projectLinks.group.children[3]){
+          previousMenu = currentMenu;
+          currentMenu = moreProjects;
+          transitionMenu();
+        }
+      }
+    }
+    else {
+      obj.material.color.setHex(0xff4400);
+    }
+  }
+
   // check to see if the menu is being transitioned
-  if (transitioning){
-    for (let i = 0; i < currentMenu.num; i++){
-      if (Math.abs(Math.abs(theta) - currentMenu.theta*i - Math.PI) < 0.1){
+  if (transitioning) {
+    for (let i = 0; i < currentMenu.num; i++) {
+      if (Math.abs(Math.abs(theta) - currentMenu.theta * i - Math.PI) < 0.1) {
         currentMenu.group.children[i].visible = true;
       }
     }
-    for (let i = 0; i < previousMenu.num; i++){
-      if (Math.abs(Math.abs(theta) - previousMenu.theta*i - Math.PI) < 0.1){
+    for (let i = 0; i < previousMenu.num; i++) {
+      if (Math.abs(Math.abs(theta) - previousMenu.theta * i - Math.PI) < 0.1) {
         previousMenu.group.children[i].visible = false;
       }
     }
-    if (Math.abs(theta) > 1.99*Math.PI){
+    if (Math.abs(theta) > 1.99 * Math.PI) {
       transitioning = false;
       baseTheta = 0;
       theta = 0;
