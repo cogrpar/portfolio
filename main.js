@@ -285,6 +285,7 @@ document.body.onmouseup = function() {
   mouseDown = 0;
 }
 document.body.onmousemove = function(event) { // dont trigger the mouse down if the mouse is moving
+  mouseDown = 0;
   mouseVector.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouseVector.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 }
