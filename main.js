@@ -288,6 +288,12 @@ document.body.onmousemove = function(event) { // dont trigger the mouse down if 
   mouseVector.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouseVector.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 }
+document.addEventListener('touchstart', function() {
+  mouseDown = 1;
+});
+document.addEventListener('touchend', function() {
+  mouseDown = 0;
+});
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
@@ -342,7 +348,7 @@ function animate() {
     var intersection = intersects[0];
     var obj = intersection.object;
 
-    if (mouseDown == 1 || (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+    if (mouseDown == 1) {
       obj.material.color.setHex(0xffd900);
       if (currentMenu == primaryLinks){
         if (obj == primaryLinks.group.children[0]){
