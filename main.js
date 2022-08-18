@@ -298,6 +298,9 @@ document.addEventListener('touchend', function() {
 document.addEventListener('touchcancel', function() {
   mouseDown = 0;
 });
+document.addEventListener('touchmove'), function() {
+  mouseDown = 0;
+});
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
