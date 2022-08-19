@@ -1,3 +1,37 @@
+@font-face {
+    font-family: "AdventureSubtitles";
+    src: url("./fonts/AdventureSubtitles.ttf") format("truetype");;
+}
+
+/* animation for the loading screen */
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes background {
+  0% {
+    background-color: black;
+  }
+  75% {
+    background-color: black;
+    color: transparent;
+  }
+  100% {
+    background-color: transparent;
+    color: transparent;
+  }
+}
+
 canvas {
   position: fixed;
   top: 0;
@@ -6,17 +40,66 @@ canvas {
 
 body{ 
   margin: 0;
+  overflow: hidden; /* hide scrollbars */
 }
 
 main {
   width: 100vw;
-  color: white;
+  height: 100vh;
+  color: transparent;
   z-index: 99;
   position: absolute;
-  width: 100%;
   margin: 0px auto;
   padding: 120px 0px;
-  
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  animation-name: background;
+  animation-duration: 20s;
+}
+
+#hello {
+  color: gray;
+  opacity: 0;
+  font-family: 'AdventureSubtitles';
+  font-size: 40px;
+  position: fixed;
+  width: 100vw;
+	top: 45vh;
+	text-align: center;
+	z-index: 100; /* display text above the THREE.js canvas */
+	display: block;
+  animation-name: loading;
+  animation-duration: 3s;
+}
+
+#arrows {
+  color: gray;
+  opacity: 0;
+  font-family: 'AdventureSubtitles';
+  font-size: 25px;
+  position: fixed;
+  width: 100vw;
+  top: 20vh;
+  text-align: center;
+  z-index: 100; /* display text above the THREE.js canvas */
+  display: block;
+  animation-name: loading;
+  animation-duration: 6s;
+  animation-delay: 3s;
+}
+
+#select {
+  color: gray;
+  opacity: 0;
+  font-family: 'AdventureSubtitles';
+  font-size: 25px;
+  position: fixed;
+  width: 100vw;
+  top: 20vh;
+  text-align: center;
+  z-index: 100; /* display text above the THREE.js canvas */
+  display: block;
+  animation-name: loading;
+  animation-duration: 6s;
+  animation-delay: 9s;
 }

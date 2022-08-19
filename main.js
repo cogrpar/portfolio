@@ -260,7 +260,7 @@ function cameraOscillate(numDirections, severity) { // function that animates th
 // events to handle mouse presses
 var mouseDown = 0;
 var raycaster = new THREE.Raycaster(); // raycaster object to detect objects intersected by the ray sent out by the mouse
-var mouseVector = new THREE.Vector3(); // vector to store the mouse position
+var mouseVector = new THREE.Vector3([renderer.domElement.clientWidth, renderer.domElement.clientHeight, 0]); // vector to store the mouse position
 document.body.onmousedown = function(event) {
   mouseDown = 1;
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
@@ -289,18 +289,17 @@ document.body.onmousemove = function(event) { // dont trigger the mouse down if 
   mouseVector.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouseVector.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 }
-document.addEventListener('touchstart', function() {
-  mouseDown = 1;
-});
-document.addEventListener('touchend', function() {
-  mouseDown = 0;
-});
-document.addEventListener('touchcancel', function() {
-  mouseDown = 0;
-});
-document.addEventListener('touchmove'), function() {
-  mouseDown = 0;
-});
+if ("ontouchstart" in document.documentElement){
+  document.addEventListener('touchstart', function() {
+    mouseDown = 1;
+  });
+  document.addEventListener('touchend', function() {
+    mouseDown = 0;
+  });
+  document.addEventListener('touchcancel', function() {
+    mouseDown = 0;
+  });
+}
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
@@ -396,7 +395,7 @@ function animate() {
       }
     }
     else {
-      obj.material.color.setHex(0xff4400);
+      obj.material.color.setHex(0xff9000);
     }
   }
 
