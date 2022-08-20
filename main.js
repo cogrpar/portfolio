@@ -11,6 +11,8 @@ function addArray(a, b) {
   return a.map((e, i) => e + b[i]);
 }
 
+const startLoad = Date.now();
+
 
 
 // setup three js scene
@@ -78,6 +80,8 @@ scene.background = spaceTexture;
 
 
 // add geometries
+let loading = true;
+
 let loadPlanet;
 let loadRings;
 const loader = new THREE.GLTFLoader();
@@ -333,6 +337,26 @@ function transitionMenu() {
 
 // main animation function
 function animate() {
+  // check to see if the geometries are done loading
+  if (loading){
+    if (currentMenu.group.children.length == currentMenu.num &&
+      projectLinks.group.children.length == projectLinks.num &&
+      quantumProjects.group.children.length == quantumProjects.num &&
+      aiProjects.group.children.length == aiProjects.num &&
+      tpProjects.group.children.length == tpProjects.num &&
+      moreProjects.group.children.length == moreProjects.num &&
+      workLinks.group.children.length == workLinks.num &&
+      loadPlanet && loadRings){
+      // if all geometries are loaded, make the loading screen go away
+      loading = false;
+      const endLoad = Date.now();
+      const loadTime = endLoad - startLoad;
+      document.getElementById('loading').style.animationDuration = loadTime/0.75 + 2000 + 'ms';
+      document.getElementById('loading').style.color = 'transparent';
+      document.getElementById('loading').style.backgroundColor = 'transparent';
+    }
+  }
+  
   // rotate the planet and rings
   if (loadPlanet) {
     loadPlanet.scene.rotation.y += 0.003;
