@@ -305,6 +305,22 @@ if ("ontouchstart" in document.documentElement){
   });
 }
 
+// back button event listener
+document.getElementById('backButton').addEventListener('click', function() {
+  if (!transitioning){
+    if (currentMenu == projectLinks || currentMenu == workLinks){
+      previousMenu = currentMenu;
+      currentMenu = primaryLinks;
+      transitionMenu();
+    }
+    else if (currentMenu == quantumProjects || currentMenu == aiProjects || currentMenu == tpProjects || currentMenu == moreProjects){
+      previousMenu = currentMenu;
+      currentMenu = projectLinks;
+      transitionMenu();
+    }
+  }
+});
+
 // events to handle key presses
 document.body.onkeydown = function(event) {
   console.log(event)
@@ -352,8 +368,7 @@ function animate() {
       const endLoad = Date.now();
       const loadTime = endLoad - startLoad;
       document.getElementById('loading').style.animationDuration = loadTime/0.75 + 2000 + 'ms';
-      document.getElementById('loading').style.color = 'transparent';
-      document.getElementById('loading').style.backgroundColor = 'transparent';
+      document.getElementById('backButton').style.animationDelay = 2+Math.max(13, loadTime/1000) + 's';
     }
   }
   
@@ -371,8 +386,8 @@ function animate() {
   // check to see if a link has been selected
   raycaster.setFromCamera(mouseVector, camera); // send a ray from the camera to the mouse vector
   var intersects = raycaster.intersectObjects(currentMenu.group.children); // detect object intersecting the ray
-  currentMenu.group.children.forEach(function(cube) { // reset color of each object
-    cube.material.color.setHex(0xf03030);
+  currentMenu.group.children.forEach(function(obj) { // reset color of each object
+    obj.material.color.setHex(0xf03030);
   });
   if (intersects.length > 0) { // if there are objects that were intersected
     var intersection = intersects[0];

@@ -20,16 +20,24 @@
 }
 @keyframes fadeOut {
   0% {
-    background-color: black;
-    color: gray;
+    opacity: 1;
   }
   75% {
-    background-color: black;
-    color: gray;
+    opacity: 1;
   }
   100% {
-    background-color: transparent;
-    color: transparent;
+    opacity: 0;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 @keyframes background {
@@ -83,6 +91,7 @@ main {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   animation-name: fadeOut;
+  animation-fill-mode: forwards;
 }
 
 #hello {
@@ -130,4 +139,33 @@ main {
   animation-name: tempShow;
   animation-duration: 6s;
   animation-delay: 9s;
+}
+
+button {
+  width: 120px;
+  background-color: transparent;
+  border: none;
+  color: #a70c0c;
+  font-family: 'AdventureSubtitles';
+  font-size: 30px;
+  text-shadow: 1px 1px 2px #480505, -1px -1px 2px #480505;
+}
+button:hover {
+  color: #b36500;
+  text-shadow: 1px 1px 2px #4d2b00, -1px -1px 2px #4d2b00;
+}
+button:active {
+  color: #b39800;
+  text-shadow: 1px 1px 2px #665700, -1px -1px 2px #665700;
+}
+#backButton {
+  opacity: 0;
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% - 60px);
+  z-index: 101;
+  animation: fadeIn;
+  animation-duration: 4s;
+  animation-delay: infinite;
+  animation-fill-mode: forwards;
 }
