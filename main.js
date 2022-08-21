@@ -12,6 +12,7 @@ function addArray(a, b) {
 }
 
 const startLoad = Date.now();
+let viewingOverlay = false;
 
 
 
@@ -268,20 +269,22 @@ var mouseVector = new THREE.Vector3([renderer.domElement.clientWidth, renderer.d
 document.body.onmousedown = function(event) {
   mouseDown = 1;
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
-  if (x > 0.5) {
-    if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
-      // update camera oscillation vars to make camera move to the right
-      directions = [];
-      currentDirection = 0;
-      baseTheta = baseTheta - currentMenu.theta;
+  if (!viewingOverlay) {
+    if (x > 0.5) {
+      if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
+        // update camera oscillation vars to make camera move to the right
+        directions = [];
+        currentDirection = 0;
+        baseTheta = baseTheta - currentMenu.theta;
+      }
     }
-  }
-  if (x < -0.5) {
-    if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
-      // update camera oscillation vars to make camera move to the left
-      directions = [];
-      currentDirection = 0;
-      baseTheta = baseTheta + currentMenu.theta;
+    if (x < -0.5) {
+      if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
+        // update camera oscillation vars to make camera move to the left
+        directions = [];
+        currentDirection = 0;
+        baseTheta = baseTheta + currentMenu.theta;
+      }
     }
   }
 };
@@ -293,7 +296,7 @@ document.body.onmousemove = function(event) { // dont trigger the mouse down if 
   mouseVector.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
   mouseVector.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1;
 }
-if ("ontouchstart" in document.documentElement){
+if ("ontouchstart" in document.documentElement) {
   document.addEventListener('touchstart', function() {
     mouseDown = 1;
   });
@@ -307,37 +310,43 @@ if ("ontouchstart" in document.documentElement){
 
 // back button event listener
 document.getElementById('backButton').addEventListener('click', function() {
-  if (!transitioning){
-    if (currentMenu == projectLinks || currentMenu == workLinks){
+  if (!transitioning && !viewingOverlay) {
+    if (currentMenu == projectLinks || currentMenu == workLinks) {
       previousMenu = currentMenu;
       currentMenu = primaryLinks;
       transitionMenu();
     }
-    else if (currentMenu == quantumProjects || currentMenu == aiProjects || currentMenu == tpProjects || currentMenu == moreProjects){
+    else if (currentMenu == quantumProjects || currentMenu == aiProjects || currentMenu == tpProjects || currentMenu == moreProjects) {
       previousMenu = currentMenu;
       currentMenu = projectLinks;
       transitionMenu();
     }
   }
 });
+// info overlay x button
+document.getElementsByName('overlayButton')[0].addEventListener('click', function() {
+  document.getElementById('infoOverlay').style.animation = 'slideOut 2s forwards';
+  viewingOverlay = false;
+});
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
-  console.log(event)
-  if (event.key == 'ArrowRight') {
-    if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
-      // update camera oscillation vars to make camera move to the right
-      directions = [];
-      currentDirection = 0;
-      baseTheta = baseTheta - currentMenu.theta;
+  if (!viewingOverlay) {
+    if (event.key == 'ArrowRight') {
+      if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
+        // update camera oscillation vars to make camera move to the right
+        directions = [];
+        currentDirection = 0;
+        baseTheta = baseTheta - currentMenu.theta;
+      }
     }
-  }
-  if (event.key == 'ArrowLeft') {
-    if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
-      // update camera oscillation vars to make camera move to the left
-      directions = [];
-      currentDirection = 0;
-      baseTheta = baseTheta + currentMenu.theta;
+    if (event.key == 'ArrowLeft') {
+      if (baseTheta + currentMenu.theta < 0.1) { // don't update if this is the leftmost option
+        // update camera oscillation vars to make camera move to the left
+        directions = [];
+        currentDirection = 0;
+        baseTheta = baseTheta + currentMenu.theta;
+      }
     }
   }
 };
@@ -354,7 +363,7 @@ function transitionMenu() {
 // main animation function
 function animate() {
   // check to see if the geometries are done loading
-  if (loading){
+  if (loading) {
     if (currentMenu.group.children.length == currentMenu.num &&
       projectLinks.group.children.length == projectLinks.num &&
       quantumProjects.group.children.length == quantumProjects.num &&
@@ -362,16 +371,16 @@ function animate() {
       tpProjects.group.children.length == tpProjects.num &&
       moreProjects.group.children.length == moreProjects.num &&
       workLinks.group.children.length == workLinks.num &&
-      loadPlanet && loadRings){
+      loadPlanet && loadRings) {
       // if all geometries are loaded, make the loading screen go away
       loading = false;
       const endLoad = Date.now();
       const loadTime = endLoad - startLoad;
-      document.getElementById('loading').style.animationDuration = loadTime/0.75 + 2000 + 'ms';
-      document.getElementById('backButton').style.animationDelay = 2+Math.max(13, loadTime/1000) + 's';
+      document.getElementById('loading').style.animationDuration = loadTime / 0.75 + 2000 + 'ms';
+      document.getElementById('backButton').style.animationDelay = 2 + Math.max(13, loadTime / 1000) + 's';
     }
   }
-  
+
   // rotate the planet and rings
   if (loadPlanet) {
     loadPlanet.scene.rotation.y += 0.003;
@@ -389,44 +398,45 @@ function animate() {
   currentMenu.group.children.forEach(function(obj) { // reset color of each object
     obj.material.color.setHex(0xf03030);
   });
-  if (intersects.length > 0) { // if there are objects that were intersected
+  if (intersects.length > 0 && !viewingOverlay) { // if there are objects that were intersected
     var intersection = intersects[0];
     var obj = intersection.object;
 
     if (mouseDown == 1) {
       obj.material.color.setHex(0xffd900);
-      if (currentMenu == primaryLinks){
-        if (obj == primaryLinks.group.children[0]){
-          
+      if (currentMenu == primaryLinks) {
+        if (obj == primaryLinks.group.children[0]) {
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
         }
-        else if (obj == primaryLinks.group.children[1]){
+        else if (obj == primaryLinks.group.children[1]) {
           previousMenu = currentMenu;
           currentMenu = projectLinks;
           transitionMenu();
         }
-        else if (obj == primaryLinks.group.children[2]){
+        else if (obj == primaryLinks.group.children[2]) {
           previousMenu = currentMenu;
           currentMenu = workLinks;
           transitionMenu();
         }
       }
-      else if (currentMenu == projectLinks){
-        if (obj == projectLinks.group.children[0]){
+      else if (currentMenu == projectLinks) {
+        if (obj == projectLinks.group.children[0]) {
           previousMenu = currentMenu;
           currentMenu = quantumProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[1]){
+        else if (obj == projectLinks.group.children[1]) {
           previousMenu = currentMenu;
           currentMenu = aiProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[2]){
+        else if (obj == projectLinks.group.children[2]) {
           previousMenu = currentMenu;
           currentMenu = tpProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[3]){
+        else if (obj == projectLinks.group.children[3]) {
           previousMenu = currentMenu;
           currentMenu = moreProjects;
           transitionMenu();

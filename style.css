@@ -40,6 +40,22 @@
     opacity: 1;
   }
 }
+@keyframes slideOut {
+  from {
+    left: 0vw;
+  }
+  to {
+    left: -60vw;
+  }
+}
+@keyframes slideIn {
+  from {
+    left: -60vw;
+  }
+  to {
+    left: 0vw;
+  }
+}
 @keyframes background {
   0% {
     background-color: black;
@@ -141,23 +157,6 @@ main {
   animation-delay: 9s;
 }
 
-button {
-  width: 120px;
-  background-color: transparent;
-  border: none;
-  color: #a70c0c;
-  font-family: 'AdventureSubtitles';
-  font-size: 30px;
-  text-shadow: 1px 1px 2px #480505, -1px -1px 2px #480505;
-}
-button:hover {
-  color: #b36500;
-  text-shadow: 1px 1px 2px #4d2b00, -1px -1px 2px #4d2b00;
-}
-button:active {
-  color: #b39800;
-  text-shadow: 1px 1px 2px #665700, -1px -1px 2px #665700;
-}
 #backButton {
   opacity: 0;
   position: fixed;
@@ -166,6 +165,72 @@ button:active {
   z-index: 101;
   animation: fadeIn;
   animation-duration: 4s;
-  animation-delay: infinite;
+  animation-delay: 1000000000000s;
   animation-fill-mode: forwards;
+}
+#backButton button {
+  width: 120px;
+  background-color: transparent;
+  border: none;
+  color: #a70c0c;
+  font-family: 'AdventureSubtitles';
+  font-size: 30px;
+  text-shadow: 1px 1px 2px #480505, -1px -1px 2px #480505;
+}
+#backButton button:hover {
+  color: #b36500;
+  text-shadow: 1px 1px 2px #4d2b00, -1px -1px 2px #4d2b00;
+}
+#backButton button:active {
+  color: #b39800;
+  text-shadow: 1px 1px 2px #665700, -1px -1px 2px #665700;
+}
+
+#infoOverlay {
+  z-index: 101;
+  position: fixed;
+  top: 0;
+  left: -60vw;
+  animation-fill-mode: forwards;
+}
+#infoOverlay #overlayBackground{
+  width: 100vw;
+  height: 200vh;
+  background-image: linear-gradient(black, maroon, #404040);
+  border: solid;
+  border-width: 4px;
+  border-color: #404040;
+  box-shadow: 8px 0px 10px black;
+  position: absolute;
+  top: -40vh;
+  left: calc(-65vw + 100px);
+  rotate: 10deg;
+}
+#infoOverlay button {
+  background-color: transparent;
+  border: none;
+  color: #a70c0c;
+  font-family: 'AdventureSubtitles';
+  font-size: 30px;
+  text-shadow: 1px 1px 2px #480505, -1px -1px 2px #480505;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+}
+#infoOverlay button:hover {
+  color: #b36500;
+  text-shadow: 1px 1px 2px #4d2b00, -1px -1px 2px #4d2b00;
+}
+#infoOverlay button:active {
+  color: #b39800;
+  text-shadow: 1px 1px 2px #665700, -1px -1px 2px #665700;
+}
+#infoOverlay #content {
+  width: calc(48vw - 120px);
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  color: gray;
+  font-family: 'AdventureSubtitles';
+  font-size: 20px;
 }
