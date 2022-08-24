@@ -45,12 +45,12 @@
     left: 0vw;
   }
   to {
-    left: -60vw;
+    left: -150vw;
   }
 }
 @keyframes slideIn {
   from {
-    left: -60vw;
+    left: -150vw;
   }
   to {
     left: 0vw;
@@ -100,6 +100,11 @@ main {
   color: gray;
   font-family: 'AdventureSubtitles';
   font-size: 15px;
+  /* disable user selection of text */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
   z-index: 99;
   position: fixed;
   top: 0px;
@@ -115,6 +120,11 @@ main {
   opacity: 0;
   font-family: 'AdventureSubtitles';
   font-size: 40px;
+  /* disable user selection of text */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
   position: fixed;
   width: 100vw;
 	top: 45vh;
@@ -130,6 +140,11 @@ main {
   opacity: 0;
   font-family: 'AdventureSubtitles';
   font-size: 25px;
+  /* disable user selection of text */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
   position: fixed;
   width: 100vw;
   top: 20vh;
@@ -146,6 +161,11 @@ main {
   opacity: 0;
   font-family: 'AdventureSubtitles';
   font-size: 25px;
+  /* disable user selection of text */
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
   position: fixed;
   width: 100vw;
   top: 20vh;
@@ -190,7 +210,7 @@ main {
   z-index: 101;
   position: fixed;
   top: 0;
-  left: -60vw;
+  left: -150vw;
   animation-fill-mode: forwards;
 }
 #infoOverlay #overlayBackground{

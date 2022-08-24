@@ -269,7 +269,7 @@ var mouseVector = new THREE.Vector3([renderer.domElement.clientWidth, renderer.d
 document.body.onmousedown = function(event) {
   mouseDown = 1;
   let x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1; // mouse pos -1 to 1
-  if (!viewingOverlay) {
+  if (!viewingOverlay && !transitioning) {
     if (x > 0.5) {
       if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
         // update camera oscillation vars to make camera move to the right
@@ -331,7 +331,7 @@ document.getElementsByName('overlayButton')[0].addEventListener('click', functio
 
 // events to handle key presses
 document.body.onkeydown = function(event) {
-  if (!viewingOverlay) {
+  if (!viewingOverlay && !transitioning) {
     if (event.key == 'ArrowRight') {
       if (-currentMenu.theta * currentMenu.num - (baseTheta - currentMenu.theta) < -0.1) { // don't update if this is the rightmost option
         // update camera oscillation vars to make camera move to the right
@@ -360,8 +360,12 @@ function transitionMenu() {
   }
 }
 
+let cooldown = 0; // a cooldown counter that updates each frame
+
 // main animation function
 function animate() {
+  cooldown++;
+  
   // check to see if the geometries are done loading
   if (loading) {
     if (currentMenu.group.children.length == currentMenu.num &&
@@ -402,10 +406,12 @@ function animate() {
     var intersection = intersects[0];
     var obj = intersection.object;
 
-    if (mouseDown == 1) {
+    if (mouseDown == 1 && cooldown > 10) {
+      cooldown = 0;
       obj.material.color.setHex(0xffd900);
       if (currentMenu == primaryLinks) {
         if (obj == primaryLinks.group.children[0]) {
+          // about me
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -440,6 +446,82 @@ function animate() {
           previousMenu = currentMenu;
           currentMenu = moreProjects;
           transitionMenu();
+          console.log('triggered')
+        }
+      }
+      else if (currentMenu == quantumProjects) {
+        if (obj == quantumProjects.group.children[0]) {
+          // qonic
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == quantumProjects.group.children[1]) {
+          // qhore logic
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == quantumProjects.group.children[2]) {
+          // qcpuware
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == quantumProjects.group.children[3]) {
+          // breakthrough jr challenge vid
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+      }
+      else if (currentMenu == aiProjects) {
+        if (obj == aiProjects.group.children[0]) {
+          // hill climb ai
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == aiProjects.group.children[1]) {
+          // java NN framework
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+      }
+      else if (currentMenu == tpProjects) {
+        if (obj == tpProjects.group.children[0]) {
+          // lean4 tm
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == tpProjects.group.children[1]) {
+          // lean4 axiomatic system
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == tpProjects.group.children[2]) {
+          // qhore logic
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+      }
+      else if (currentMenu == moreProjects) {
+        if (obj == moreProjects.group.children[0]) {
+          // robotics
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == moreProjects.group.children[1]) {
+          // ap physics portfolio
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+      }
+      else if (currentMenu == workLinks) {
+        if (obj == workLinks.group.children[0]) {
+          // ai leadership
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == workLinks.group.children[1]) {
+          // sar
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
         }
       }
     }
