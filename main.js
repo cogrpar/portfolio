@@ -11,6 +11,19 @@ function addArray(a, b) {
   return a.map((e, i) => e + b[i]);
 }
 
+function loadInfo(infoFile) { // function that loads info from a json file into the info overlay
+  fetch(infoFile).then((response) => {
+    response.text().then((data) => {
+      let info = JSON.parse(data);
+      if (info.img){ // include the image if a link is provided in the json file
+        document.getElementById('content').innerHTML = '<img src="' + info.img + '"><br><br>';
+      }
+      document.getElementById('content').innerHTML += info.text; // add the text
+      console.log(document.getElementById('content'));
+    })
+  });
+}
+
 const startLoad = Date.now();
 let viewingOverlay = false;
 
@@ -412,6 +425,7 @@ function animate() {
       if (currentMenu == primaryLinks) {
         if (obj == primaryLinks.group.children[0]) {
           // about me
+          loadInfo('./info/test.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
