@@ -121,42 +121,42 @@ primaryLinks.dict = {}; // dictionary storing the 3d objects of the primary link
 primaryLinks.group = new THREE.Group(); // create group of objects for the primary links
 
 const projectLinks = {};
-projectLinks.links = ['Quantum\nComputing', 'Machine\nLearning', 'Theorem\nProving', 'More'];
+projectLinks.links = [' Quantum \nComputing', 'Machine\nLearning', 'Theorem\nProving', 'More'];
 projectLinks.num = projectLinks.links.length;
 projectLinks.theta = Math.PI / (projectLinks.num);
 projectLinks.dict = {};
 projectLinks.group = new THREE.Group();
 
 const quantumProjects = {};
-quantumProjects.links = ['Qonic', 'Quantum\nHoare Logic', 'QCPUWare', 'Breakthrough\nJr Challenge'];
+quantumProjects.links = ['Qonic', '  Quantum  \nHoare Logic', 'QCPUWare', 'Breakthrough\nJr Challenge'];
 quantumProjects.num = quantumProjects.links.length;
 quantumProjects.theta = Math.PI / (quantumProjects.num);
 quantumProjects.dict = {};
 quantumProjects.group = new THREE.Group();
 
 const aiProjects = {};
-aiProjects.links = ['Hill Climb\nRacing AI', 'Custom Java\nNeural Network'];
+aiProjects.links = [' Hill Climb \nRacing AI', ' Custom Java \nNeural Network'];
 aiProjects.num = aiProjects.links.length;
 aiProjects.theta = Math.PI / (aiProjects.num);
 aiProjects.dict = {};
 aiProjects.group = new THREE.Group();
 
 const tpProjects = {};
-tpProjects.links = ['Lean4 Turing\nMachine', 'Lean4 Axiomatic\nSystem', 'Quantum\nHoare Logic'];
+tpProjects.links = ['Lean4 Turing\n  Machine  ', 'Lean4 Axiomatic\n    System    ', '  Quantum  \nHoare Logic'];
 tpProjects.num = tpProjects.links.length;
 tpProjects.theta = Math.PI / (tpProjects.num);
 tpProjects.dict = {};
 tpProjects.group = new THREE.Group();
 
 const moreProjects = {};
-moreProjects.links = ['Robotics', 'AP Physics\nLabs Portfolio'];
+moreProjects.links = ['Robotics', '  AP Physics  \nLabs Portfolio'];
 moreProjects.num = moreProjects.links.length;
 moreProjects.theta = Math.PI / (moreProjects.num);
 moreProjects.dict = {};
 moreProjects.group = new THREE.Group();
 
 const workLinks = {};
-workLinks.links = ['SVVSD AI\nLeadership', 'SVVSD SAR'];
+workLinks.links = [' SVVSD AI \nLeadership', 'SVVSD SAR'];
 workLinks.num = workLinks.links.length;
 workLinks.theta = Math.PI / (workLinks.num);
 workLinks.dict = {};
@@ -182,7 +182,7 @@ function loadMenu(newMenu, visible = false) { // function to transition from the
         for (let i = 0; i < newMenu.num; i++) {
           let text = new THREE.TextGeometry(newMenu.links[i], {
             font: font,
-            size: 0.3,
+            size: 0.24,
             height: 0.03,
             curveSegments: 12,
             bevelEnabled: false

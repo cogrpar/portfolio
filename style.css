@@ -147,7 +147,7 @@ main {
   user-select: none; /* Standard */
   position: fixed;
   width: 100vw;
-  top: 20vh;
+  top: 35vh;
   text-align: center;
   z-index: 100; /* display text above the THREE.js canvas */
   display: block;
@@ -168,7 +168,7 @@ main {
   user-select: none; /* Standard */
   position: fixed;
   width: 100vw;
-  top: 20vh;
+  top: 35vh;
   text-align: center;
   z-index: 100; /* display text above the THREE.js canvas */
   display: block;
@@ -223,7 +223,7 @@ main {
   box-shadow: 8px 0px 10px black;
   position: absolute;
   top: -40vh;
-  left: calc(-65vw + 100px);
+  left: calc(-55vw + 100px);
   rotate: 10deg;
 }
 #infoOverlay button {
@@ -246,16 +246,16 @@ main {
   text-shadow: 1px 1px 2px #665700, -1px -1px 2px #665700;
 }
 #infoOverlay #content {
-  width: calc(48vw - 120px);
+  width: calc(55vw - 90px);
   position: absolute;
   top: 60px;
   left: 20px;
   color: gray;
   font-family: 'AdventureSubtitles';
-  font-size: 20px;
+  font-size: 18px;
 }
 #infoOverlay img {
-  width: calc(48vw - 120px);
+  width: calc(55vw - 90px);
   border: solid;
   border-width: 4px;
   border-color: #404040;
