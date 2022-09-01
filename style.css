@@ -253,6 +253,7 @@ main {
   color: gray;
   font-family: 'AdventureSubtitles';
   font-size: 18px;
+  text-align: center;
 }
 #infoOverlay img {
   width: calc(55vw - 90px);

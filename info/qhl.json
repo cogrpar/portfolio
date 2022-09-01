@@ -1,0 +1,3 @@
+{
+  "text": "<img src='./media/qonic.png' style='display: block; margin-left: auto; margin-right: auto; width: 180px; border: none; box-shadow: none;'><br>An implimentation of quantum Hoare logic (QHL) with applications to quantum theorem proving within the Qonic framework.  This project was inspired by <a href='https://arxiv.org/abs/1601.03835' target='_blank'>this paper</a>.<br><br><a href='https://github.com/Qonic-Team/qonic-QHoare-logic' target='_blank'>This Project on Github</a><br><br><a href='https://github.com/Qonic-Team/qonic-QHoare-logic/blob/main/QHL.ipynb' target='_blank'>The Project Notebook</a>"
+}

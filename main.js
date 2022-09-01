@@ -15,6 +15,7 @@ function loadInfo(infoFile) { // function that loads info from a json file into 
   fetch(infoFile).then((response) => {
     response.text().then((data) => {
       let info = JSON.parse(data);
+      document.getElementById('content').innerHTML = '';
       if (info.img){ // include the image if a link is provided in the json file
         document.getElementById('content').innerHTML = '<img src="' + info.img + '"><br><br>';
       }
@@ -415,7 +416,7 @@ function animate() {
   currentMenu.group.children.forEach(function(obj) { // reset color of each object
     obj.material.color.setHex(0xf03030);
   });
-  if (intersects.length > 0 && !viewingOverlay) { // if there are objects that were intersected
+  if (intersects.length > 0 && !viewingOverlay && !transitioning) { // if there are objects that were intersected
     var intersection = intersects[0];
     var obj = intersection.object;
 
@@ -425,7 +426,7 @@ function animate() {
       if (currentMenu == primaryLinks) {
         if (obj == primaryLinks.group.children[0]) {
           // about me
-          loadInfo('./info/test.json');
+          loadInfo('./info/aboutme.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -466,21 +467,25 @@ function animate() {
       else if (currentMenu == quantumProjects) {
         if (obj == quantumProjects.group.children[0]) {
           // qonic
+          loadInfo('./info/qonic.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == quantumProjects.group.children[1]) {
           // qhore logic
+          loadInfo('./info/qhl.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == quantumProjects.group.children[2]) {
           // qcpuware
+          loadInfo('./info/qcpuware.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == quantumProjects.group.children[3]) {
           // breakthrough jr challenge vid
+          loadInfo('./info/breakthroughchallenge.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -488,11 +493,13 @@ function animate() {
       else if (currentMenu == aiProjects) {
         if (obj == aiProjects.group.children[0]) {
           // hill climb ai
+          loadInfo('./info/hillclimb.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == aiProjects.group.children[1]) {
           // java NN framework
+          loadInfo('./info/javaneuralnet.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -500,16 +507,19 @@ function animate() {
       else if (currentMenu == tpProjects) {
         if (obj == tpProjects.group.children[0]) {
           // lean4 tm
+          loadInfo('./info/lean4tm.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == tpProjects.group.children[1]) {
           // lean4 axiomatic system
+          loadInfo('./info/lean4axiomaticsys.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == tpProjects.group.children[2]) {
           // qhore logic
+          loadInfo('./info/qhl.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -517,11 +527,13 @@ function animate() {
       else if (currentMenu == moreProjects) {
         if (obj == moreProjects.group.children[0]) {
           // robotics
+          loadInfo('./info/robotics.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == moreProjects.group.children[1]) {
           // ap physics portfolio
+          loadInfo('./info/physicslabs.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
@@ -529,11 +541,13 @@ function animate() {
       else if (currentMenu == workLinks) {
         if (obj == workLinks.group.children[0]) {
           // ai leadership
+          loadInfo('./info/aileadership.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == workLinks.group.children[1]) {
           // sar
+          loadInfo('./info/sar.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
