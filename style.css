@@ -263,9 +263,9 @@ main {
   border-color: #404040;
   box-shadow: 3px 0px 6px black;
 }
-a:link a:visited {
+a, a:link, a:visited {
   color: #a70c0c;
 }
-a:hover a:active {
+a, a:hover, a:active {
   color: #b36500;
 }
