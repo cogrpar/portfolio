@@ -1,0 +1,4 @@
+{
+  "img": "./media/mnist.png",
+  "text": "This repo has the code that I used to create a neural network framework in Java. This project was part of my experience in understanding the inner workings of neural networks. As an initial test of the model, I implemented written digit classification using the MNIST database. As a more ambitious test, I attempted to use this framework to generate music. While the results of both of these tests were mixed, I did find that the models were able to reduce loss to a certain extent.<br><br><a href='https://github.com/cogrpar/JavaNeuralNetworkFramework' target='_blank'>Project on Github</a><br><a href='https://www.youtube.com/watch?v=CmkAsDjjGCc' target='_blank'>AI Music Output on Youtube</a>"
+}

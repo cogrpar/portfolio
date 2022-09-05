@@ -258,6 +258,7 @@ main {
 #infoOverlay img {
   width: calc(100px + calc(38vw));
   border: solid;
+  background: white;
   border-width: 4px;
   border-color: #404040;
   box-shadow: 3px 0px 6px black;

@@ -1,0 +1,4 @@
+{
+  "img": "./media/cluster.gif",
+  "text": "For my final in AP Computer Science, I implimented distributed training of a neural network on a custom Raspberry Pi cluster I built (pictured above). Distributed training involves the training loop being executed simultaneously on multiple devices. Each instance of the loop is trained against different training data, and offloading the work makes training more efficient. For more details, see the project site:<br><br><a href='https://sites.google.com/svvsd.org/apcs-final-project-site/home-why?authuser=0' target='_blank'>Project Site</a>"
+}

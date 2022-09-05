@@ -68,7 +68,7 @@ const pointLight = new THREE.PointLight(0xffffff); // star
 pointLight.position.set(70, 50, -33);
 scene.add(pointLight);
 
-const ambientLight = new THREE.AmbientLight(0x606060); // ambient
+const ambientLight = new THREE.AmbientLight(0x808080); // ambient
 scene.add(ambientLight);
 
 
@@ -136,7 +136,7 @@ quantumProjects.dict = {};
 quantumProjects.group = new THREE.Group();
 
 const aiProjects = {};
-aiProjects.links = [' Hill Climb \nRacing AI', ' Custom Java \nNeural Network'];
+aiProjects.links = [' Hill Climb \nRacing AI', ' Custom Java \nNeural Network', '     Distributed\n Network Training'];
 aiProjects.num = aiProjects.links.length;
 aiProjects.theta = Math.PI / (aiProjects.num);
 aiProjects.dict = {};
@@ -500,6 +500,12 @@ function animate() {
         else if (obj == aiProjects.group.children[1]) {
           // java NN framework
           loadInfo('./info/javaneuralnet.json');
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == aiProjects.group.children[2]) {
+          // distributed training
+          loadInfo('./info/distributedTraining.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
