@@ -411,8 +411,22 @@ function animate() {
   cameraOscillate(5, 0.8);
 
   // check to see if a link has been selected
-  raycaster.setFromCamera(mouseVector, camera); // send a ray from the camera to the mouse vector
-  var intersects = raycaster.intersectObjects(currentMenu.group.children); // detect object intersecting the ray
+  var intersects = [];
+  var mouseVectorModified = Object.assign({}, mouseVector);
+  var intersected = false;
+  mouseVectorModified.x -= 0.1;
+  mouseVectorModified.y -= 0.2;
+  for (var i=0; i < 20 && !intersected; i++){
+    mouseVectorModified.x += 0.01;
+    for (var j=0; j < 20 && !intersected; j++){
+      mouseVectorModified.y += 0.001;
+      raycaster.setFromCamera(mouseVectorModified, camera); // send a ray from the camera to the mouse vector
+      raycaster.intersectObjects(currentMenu.group.children).forEach(function(obj) {
+        intersects.push(obj);
+        intersected = true;
+      }); // detect object intersecting the ray
+    }
+  }
   currentMenu.group.children.forEach(function(obj) { // reset color of each object
     obj.material.color.setHex(0xf03030);
   });

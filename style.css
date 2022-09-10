@@ -145,6 +145,7 @@ main {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
+  -webkit-user-drag: none;
   position: fixed;
   width: 100vw;
   top: 35vh;
@@ -166,6 +167,7 @@ main {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
+  -webkit-user-drag: none;
   position: fixed;
   width: 100vw;
   top: 35vh;
