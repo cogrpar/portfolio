@@ -414,11 +414,11 @@ function animate() {
   var intersects = [];
   var mouseVectorModified = Object.assign({}, mouseVector);
   var intersected = false;
-  mouseVectorModified.x -= 0.1;
-  mouseVectorModified.y -= 0.2;
-  for (var i=0; i < 20 && !intersected; i++){
+  mouseVectorModified.x -= 0.05;
+  mouseVectorModified.y -= 0.1;
+  for (var i=0; i < 10 && !intersected; i++){
     mouseVectorModified.x += 0.01;
-    for (var j=0; j < 20 && !intersected; j++){
+    for (var j=0; j < 10 && !intersected; j++){
       mouseVectorModified.y += 0.001;
       raycaster.setFromCamera(mouseVectorModified, camera); // send a ray from the camera to the mouse vector
       raycaster.intersectObjects(currentMenu.group.children).forEach(function(obj) {
