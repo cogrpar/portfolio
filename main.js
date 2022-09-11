@@ -202,13 +202,26 @@ function loadMenu(newMenu, visible = false) { // function to transition from the
           newMenu.dict[newMenu.links[i]].position.x = Math.cos(newMenu.theta * i) * 3.5;
           newMenu.dict[newMenu.links[i]].position.z = -Math.sin(newMenu.theta * i) * 3.5;
           newMenu.dict[newMenu.links[i]].position.y = 0.6;
-
           newMenu.dict[newMenu.links[i]].rotation.y = (Math.PI / 2) + (newMenu.theta * i);
+          
           if (!visible) {
             newMenu.dict[newMenu.links[i]].visible = false;
           }
 
+          // add a detection box behind this text
+          const detectionBoxGeometry = new THREE.BoxGeometry(2.4, 0.8, 0.03);
+          const detectionBoxMaterial = new THREE.MeshBasicMaterial({color: 0x00ff00});
+          const detectionBox = new THREE.Mesh(detectionBoxGeometry, detectionBoxMaterial);
+          detectionBox.geometry.center();
+          detectionBox.position.x = Math.cos(newMenu.theta * i) * 3.4;
+          detectionBox.position.z = -Math.sin(newMenu.theta * i) * 3.4;
+          detectionBox.position.y = 0.6;
+          detectionBox.rotation.y = (Math.PI / 2) + (newMenu.theta * i);
+
+          detectionBox.visible = false; // make the detection box invisible
+
           newMenu.group.add(newMenu.dict[newMenu.links[i]]);
+          newMenu.group.add(detectionBox);
         }
         scene.add(newMenu.group);
       }
@@ -366,7 +379,7 @@ document.body.onkeydown = function(event) {
 };
 
 function transitionMenu() {
-  if (currentMenu.group.children.length == currentMenu.num) {
+  if (currentMenu.group.children.length == currentMenu.num*2) {
     directions = [];
     currentDirection = 0;
     baseTheta = theta - 2 * Math.PI;
@@ -382,13 +395,13 @@ function animate() {
   
   // check to see if the geometries are done loading
   if (loading) {
-    if (currentMenu.group.children.length == currentMenu.num &&
-      projectLinks.group.children.length == projectLinks.num &&
-      quantumProjects.group.children.length == quantumProjects.num &&
-      aiProjects.group.children.length == aiProjects.num &&
-      tpProjects.group.children.length == tpProjects.num &&
-      moreProjects.group.children.length == moreProjects.num &&
-      workLinks.group.children.length == workLinks.num &&
+    if (currentMenu.group.children.length == currentMenu.num*2 &&
+      projectLinks.group.children.length == projectLinks.num*2 &&
+      quantumProjects.group.children.length == quantumProjects.num*2 &&
+      aiProjects.group.children.length == aiProjects.num*2 &&
+      tpProjects.group.children.length == tpProjects.num*2 &&
+      moreProjects.group.children.length == moreProjects.num*2 &&
+      workLinks.group.children.length == workLinks.num*2 &&
       loadPlanet && loadRings) {
       // if all geometries are loaded, make the loading screen go away
       loading = false;
@@ -411,27 +424,19 @@ function animate() {
   cameraOscillate(5, 0.8);
 
   // check to see if a link has been selected
-  var intersects = [];
-  var mouseVectorModified = Object.assign({}, mouseVector);
-  var intersected = false;
-  mouseVectorModified.x -= 0.075;
-  mouseVectorModified.y -= 0.15;
-  for (var i=0; i < 5 && !intersected; i++){
-    mouseVectorModified.x += 0.02;
-    for (var j=0; j < 5 && !intersected; j++){
-      mouseVectorModified.y += 0.01;
-      raycaster.setFromCamera(mouseVectorModified, camera); // send a ray from the camera to the mouse vector
-      raycaster.intersectObjects(currentMenu.group.children).forEach(function(obj) {
-        intersects.push(obj);
-        intersected = true;
-      }); // detect object intersecting the ray
-    }
-  }
+  raycaster.setFromCamera(mouseVector, camera); // send a ray from the camera to the mouse vector
+  var intersects = raycaster.intersectObjects(currentMenu.group.children); // detect object intersecting the ray
   currentMenu.group.children.forEach(function(obj) { // reset color of each object
     obj.material.color.setHex(0xf03030);
   });
   if (intersects.length > 0 && !viewingOverlay && !transitioning) { // if there are objects that were intersected
     var intersection = intersects[0];
+    for (var i = 1; i < currentMenu.num * 2; i += 2){
+      if (intersection.object == currentMenu.group.children[i]){
+        intersection.object = currentMenu.group.children[i-1]; // if a detection box was intersected, set the intersection to the corresponding text
+        break;
+      }
+    }
     var obj = intersection.object;
 
     if (mouseDown == 1 && cooldown > 10) {
@@ -444,60 +449,59 @@ function animate() {
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == primaryLinks.group.children[1]) {
+        else if (obj == primaryLinks.group.children[1*2]) {
           previousMenu = currentMenu;
           currentMenu = projectLinks;
           transitionMenu();
         }
-        else if (obj == primaryLinks.group.children[2]) {
+        else if (obj == primaryLinks.group.children[2*2]) {
           previousMenu = currentMenu;
           currentMenu = workLinks;
           transitionMenu();
         }
       }
       else if (currentMenu == projectLinks) {
-        if (obj == projectLinks.group.children[0]) {
+        if (obj == projectLinks.group.children[0*2]) {
           previousMenu = currentMenu;
           currentMenu = quantumProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[1]) {
+        else if (obj == projectLinks.group.children[1*2]) {
           previousMenu = currentMenu;
           currentMenu = aiProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[2]) {
+        else if (obj == projectLinks.group.children[2*2]) {
           previousMenu = currentMenu;
           currentMenu = tpProjects;
           transitionMenu();
         }
-        else if (obj == projectLinks.group.children[3]) {
+        else if (obj == projectLinks.group.children[3*2]) {
           previousMenu = currentMenu;
           currentMenu = moreProjects;
           transitionMenu();
-          console.log('triggered')
         }
       }
       else if (currentMenu == quantumProjects) {
-        if (obj == quantumProjects.group.children[0]) {
+        if (obj == quantumProjects.group.children[0*2]) {
           // qonic
           loadInfo('./info/qonic.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == quantumProjects.group.children[1]) {
+        else if (obj == quantumProjects.group.children[1*2]) {
           // qhore logic
           loadInfo('./info/qhl.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == quantumProjects.group.children[2]) {
+        else if (obj == quantumProjects.group.children[2*2]) {
           // qcpuware
           loadInfo('./info/qcpuware.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == quantumProjects.group.children[3]) {
+        else if (obj == quantumProjects.group.children[3*2]) {
           // breakthrough jr challenge vid
           loadInfo('./info/breakthroughchallenge.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
@@ -505,19 +509,19 @@ function animate() {
         }
       }
       else if (currentMenu == aiProjects) {
-        if (obj == aiProjects.group.children[0]) {
+        if (obj == aiProjects.group.children[0*2]) {
           // hill climb ai
           loadInfo('./info/hillclimb.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == aiProjects.group.children[1]) {
+        else if (obj == aiProjects.group.children[1*2]) {
           // java NN framework
           loadInfo('./info/javaneuralnet.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == aiProjects.group.children[2]) {
+        else if (obj == aiProjects.group.children[2*2]) {
           // distributed training
           loadInfo('./info/distributedTraining.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
@@ -525,19 +529,19 @@ function animate() {
         }
       }
       else if (currentMenu == tpProjects) {
-        if (obj == tpProjects.group.children[0]) {
+        if (obj == tpProjects.group.children[0*2]) {
           // lean4 tm
           loadInfo('./info/lean4tm.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == tpProjects.group.children[1]) {
+        else if (obj == tpProjects.group.children[1*2]) {
           // lean4 axiomatic system
           loadInfo('./info/lean4axiomaticsys.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == tpProjects.group.children[2]) {
+        else if (obj == tpProjects.group.children[2*2]) {
           // qhore logic
           loadInfo('./info/qhl.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
@@ -545,13 +549,13 @@ function animate() {
         }
       }
       else if (currentMenu == moreProjects) {
-        if (obj == moreProjects.group.children[0]) {
+        if (obj == moreProjects.group.children[0*2]) {
           // robotics
           loadInfo('./info/robotics.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == moreProjects.group.children[1]) {
+        else if (obj == moreProjects.group.children[1*2]) {
           // ap physics portfolio
           loadInfo('./info/physicslabs.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
@@ -559,13 +563,13 @@ function animate() {
         }
       }
       else if (currentMenu == workLinks) {
-        if (obj == workLinks.group.children[0]) {
+        if (obj == workLinks.group.children[0*2]) {
           // ai leadership
           loadInfo('./info/aileadership.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
-        else if (obj == workLinks.group.children[1]) {
+        else if (obj == workLinks.group.children[1*2]) {
           // sar
           loadInfo('./info/sar.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
@@ -580,13 +584,13 @@ function animate() {
 
   // check to see if the menu is being transitioned
   if (transitioning) {
-    for (let i = 0; i < currentMenu.num; i++) {
-      if (Math.abs(Math.abs(theta) - currentMenu.theta * i - Math.PI) < 0.1) {
+    for (let i = 0; i < currentMenu.num*2; i += 2) {
+      if (Math.abs(Math.abs(theta) - currentMenu.theta * (i/2) - Math.PI) < 0.1) {
         currentMenu.group.children[i].visible = true;
       }
     }
-    for (let i = 0; i < previousMenu.num; i++) {
-      if (Math.abs(Math.abs(theta) - previousMenu.theta * i - Math.PI) < 0.1) {
+    for (let i = 0; i < previousMenu.num*2; i += 2) {
+      if (Math.abs(Math.abs(theta) - previousMenu.theta * (i/2) - Math.PI) < 0.1) {
         previousMenu.group.children[i].visible = false;
       }
     }
