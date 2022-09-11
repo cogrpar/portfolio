@@ -146,6 +146,7 @@ main {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
   -webkit-user-drag: none;
+  pointer-events: none;
   position: fixed;
   width: 100vw;
   top: 35vh;
@@ -168,6 +169,7 @@ main {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
   -webkit-user-drag: none;
+  pointer-events: none;
   position: fixed;
   width: 100vw;
   top: 35vh;
