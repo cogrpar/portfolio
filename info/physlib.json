@@ -1,0 +1,4 @@
+{
+  "img": "./media/lean_logo.svg",
+  "text": "Physlib is an active project keeping track of theorems used to derive physical laws from basic assumptions within physics theories, such as kinematics and reference frames in Newtonian Mechanics.<br><br><a href='https://github.com/cogrpar/Physlib' target='_blank'>Project on Github</a>"
+}

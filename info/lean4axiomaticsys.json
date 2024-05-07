@@ -1,4 +1,0 @@
-{
-  "img": "https://leanprover.github.io/images/lean_logo2.svg",
-  "text": "In this project, I created a lean4 package for working with axiomatic formal systems in the lean theorem prover. I have plans to explore automated theorem proving by configuring OpenAI Codex to utilize this package.<br><br><a href='https://github.com/cogrpar/AxiomaticSystem' target='_blank'>Project on Github</a>"
-}

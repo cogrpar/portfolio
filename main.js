@@ -143,7 +143,7 @@ aiProjects.dict = {};
 aiProjects.group = new THREE.Group();
 
 const tpProjects = {};
-tpProjects.links = ['Lean4 Turing\n  Machine  ', 'Lean4 Axiomatic\n    System    ', '  Quantum  \nHoare Logic'];
+tpProjects.links = ['Lean4 Turing\n  Machine  ', 'Theorem Map', 'Physlib', '  Quantum  \nHoare Logic'];
 tpProjects.num = tpProjects.links.length;
 tpProjects.theta = Math.PI / (tpProjects.num);
 tpProjects.dict = {};
@@ -536,12 +536,18 @@ function animate() {
           viewingOverlay = true;
         }
         else if (obj == tpProjects.group.children[1*2]) {
-          // lean4 axiomatic system
-          loadInfo('./info/lean4axiomaticsys.json');
+          // qhore logic
+          loadInfo('./info/theoremmap.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
           viewingOverlay = true;
         }
         else if (obj == tpProjects.group.children[2*2]) {
+          // qhore logic
+          loadInfo('./info/physlib.json');
+          document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
+          viewingOverlay = true;
+        }
+        else if (obj == tpProjects.group.children[3*2]) {
           // qhore logic
           loadInfo('./info/qhl.json');
           document.getElementById('infoOverlay').style.animation = 'slideIn 2s forwards';
